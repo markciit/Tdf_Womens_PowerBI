@@ -1,4 +1,3 @@
-Overview
 This Power BI dashboard provides a comprehensive view of the Tour de France Femmes highlights from 2022 to 2025. It is designed to inform audiences about standout riders, team achievements, and race competitiveness through clear, interactive visualizations.
 This enable fans, analysts, and stakeholders to Understand race outcomes at a glance, Spot long-term trends in rider and team performance, and Gain insights into competitiveness and consistency across seasons.
 
