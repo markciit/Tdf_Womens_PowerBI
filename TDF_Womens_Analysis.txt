@@ -1,0 +1,162 @@
+Reference:
+https://medium.com/@tanzilo/data-analysis-tour-de-france-ee545563be58
+
+Team Visma - Lease A Bike
+
+Team Jumbo Visma
+
+1.Who has the most 
+Yellow Jersey
+Green Jersey
+Polka-dot Jersey
+White jersey
+
+2.What team has the most wins of the Yellow Jersey
+
+3. Rider Performance
+Which riders consistently rank in the top 10 across multiple years?
+	How does the average gap in seconds differ between winners and mid-ranked riders? -- done
+
+
+Stage History DataSet 
+- How has the distribution of stage wins by team changed across editions (Year)? -- done
+- Are stage wins becoming more concentrated among a few teams, or more spread out?
+- Which riders transitioned from stage winners to GC winners over time?
+
+Jersey Progression
+- Which riders most frequently win stages while holding a jersey (yellow, polka‑dot, green, white)?
+- How often does the eventual GC winner also win individual stages?
+- Which teams produce riders who consistently hold jerseys across multiple years?
+
+
+Top Contender - 2 to 10
+Chaser 11 to 19
+Mid Rank 20 to 50
+Backmarker 51 - 100
+
+
+
+AvgBackmarkerGap = 
+CALCULATE(
+    AVERAGE(TDFF_Riders_History[GapSeconds]),
+    TDFF_Riders_History[RiderGroup] = "Backmarker"
+)
+
+AvgTopContender = 
+CALCULATE(
+    AVERAGE(TDFF_Riders_History[GapSeconds]),
+    TDFF_Riders_History[RiderGroup] = "Top Contender"
+)
+
+AvgChaserGap = 
+CALCULATE(
+    AVERAGE(TDFF_Riders_History[GapSeconds]),
+    TDFF_Riders_History[RiderGroup] = "Chaser"
+)
+
+AvgMidRankGap = 
+CALCULATE(
+    AVERAGE(TDFF_Riders_History[GapSeconds]),
+    TDFF_Riders_History[RiderGroup] = "Mid Rank"
+)
+
+AvgBackmarkerGapFormatted = 
+VAR TotalSeconds = [AvgBackmarkerGap]
+VAR Hours = INT( TotalSeconds / 3600 )
+VAR Minutes = INT( MOD( TotalSeconds, 3600 ) / 60 )
+RETURN
+FORMAT(Hours, "0") & "h " & FORMAT(Minutes, "00") & "m"
+
+AvgTopContenderFormatted = 
+VAR TotalSeconds = [AvgTopContender]
+VAR Hours = INT( TotalSeconds / 3600 )
+VAR Minutes = INT( MOD( TotalSeconds, 3600 ) / 60 )
+RETURN
+FORMAT(Hours, "0") & "h " & FORMAT(Minutes, "00") & "m"
+
+AvgMidRankGap=
+VAR TotalSeconds = [AvgMidRankGap]
+VAR Hours = INT( TotalSeconds / 3600 )
+VAR Minutes = INT( MOD( TotalSeconds, 3600 ) / 60 )
+RETURN
+FORMAT(Hours, "0") & "h " & FORMAT(Minutes, "00") & "m"
+
+Mo-chen power bi guided project
+Measures
+1.Sales = SUM ([Fact_Sales[Sales_USD])
+2.Quantity = SUM ([Fact_Sales[Quantity])
+3.COGs = SUM(Fact_Sales[COGS_USD])
+4.Gross Profit = Sales - COGS
+5.PYTD_Sales =
+    CALCULATE (
+        [Sales],
+        SAMEPERIODLASTYEAR ( d_Date[Date] ),
+        d_Date[InPast] = TRUE
+    )
+6.PYTD_Quantity =
+    CALCULATE (
+        [Quantity],
+        SAMEPERIODLASTYEAR ( d_Date[Date] ),
+        d_Date[InPast] = TRUE
+    )
+7.PYTD_GrossProfit =
+    CALCULATE (
+        [Gross Profit],
+        SAMEPERIODLASTYEAR ( d_Date[Date] ),
+        d_Date[InPast] = TRUE
+    )
+
+8.YTD_Sales = TOTALYTD([Sales],f_PlantSales[Date_Time])
+9.YTD_Quantity = TOTALYTD([Quantity],f_PlantSales[Date_Time])
+10.YTD_GrossProfit = TOTALYTD([Gross Profit],f_PlantSales[Date_Time])
+
+11.Slicer_PriorYearToDate =
+VAR selected_value = SELECTEDVALUE(SLC_Values[Values])
+VAR result = SWITCH(selected_value,
+"Sales", [PYTD_Sales],
+"Quantity",[PYTD_Quantity],
+"Gross Profit",[PYTD_GrossProfit],
+BLANK()
+)
+RETURN
+result
+
+12.Slicer_YearToDate =
+VAR selected_value = SELECTEDVALUE(SLC_Values[Values])
+VAR result = SWITCH(selected_value,
+"Sales", [YTD_Sales],
+"Quantity",[YTD_Quantity],
+"Gross Profit",[YTD_GrossProfit],
+BLANK()
+)
+RETURN
+result
+
+13. YTD vs PYTD = [S_YTD] - [S_PYTD]'
+
+
+Groupings
+1.Base Measures
+- COGS
+- GrossProfit
+- Quantity
+- Sales
+
+2. PYTD
+-PYTD_GrossProfit
+-PYTD_Quantity
+-PYTD_Sales
+
+3.YTD
+-YTD_GrossProfit
+-YTD_Quantity
+-YTD_Sales
+
+4.Switch & Comparison
+Switch_YTD
+Swtich_PYTD
+
+
+Added new measure
+GP% = DIVIDE (Gross Profit, Sales)
+
